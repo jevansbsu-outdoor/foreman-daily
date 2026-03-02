@@ -3,9 +3,9 @@ import { prisma } from "@/lib/db";
 
 export async function GET(
   req: Request,
-  context: { params: { photoId: string } }
+  context: { params: Promise<{ photoId: string }> }
 ) {
-  const { photoId } = context.params;
+  const { photoId } = await context.params;
 
   const photo = await prisma.photo.findUnique({
     where: { id: photoId },
