@@ -4,13 +4,17 @@ import { prisma } from "@/lib/db";
 
 const Schema = z.object({ isFavorite: z.boolean() });
 
-export async function POST(req: Request, { params }: { params: { payItemId: string } }) {
+type Ctx = { params: { payItemId: string } };
+
+export async function POST(req: Request, ctx: Ctx) {
   const body = await req.json();
   const parsed = Schema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  }
 
   const updated = await prisma.payItem.update({
-    where: { id: params.payItemId },
+    where: { id: ctx.params.payItemId },
     data: { isFavorite: parsed.data.isFavorite },
   });
 
