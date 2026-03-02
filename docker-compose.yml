@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16
+    container_name: foreman_daily_db
+    environment:
+      POSTGRES_USER: foreman
+      POSTGRES_PASSWORD: foreman_pw
+      POSTGRES_DB: foreman_daily
+    ports:
+      - "5432:5432"
+    volumes:
+      - foreman_daily_pg:/var/lib/postgresql/data
+volumes:
+  foreman_daily_pg:
