@@ -4,9 +4,10 @@ import { prisma } from "@/lib/db";
 
 const Schema = z.object({ isFavorite: z.boolean() });
 
-type Ctx = { params: { payItemId: string } };
-
-export async function POST(req: Request, ctx: Ctx) {
+export async function POST(
+  req: Request,
+  context: { params: { payItemId: string } }
+) {
   const body = await req.json();
   const parsed = Schema.safeParse(body);
   if (!parsed.success) {
@@ -14,7 +15,7 @@ export async function POST(req: Request, ctx: Ctx) {
   }
 
   const updated = await prisma.payItem.update({
-    where: { id: ctx.params.payItemId },
+    where: { id: context.params.payItemId },
     data: { isFavorite: parsed.data.isFavorite },
   });
 
